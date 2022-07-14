@@ -7,7 +7,7 @@ def enum_seq_of_sz(k):
     if k == 0: return [""]
     ans = []
     for x in alphabet:
-        for word in enum(k-1):
+        for word in enum_seq_of_sz(k-1):
             ans.append(x+word)
     return ans
 
@@ -28,7 +28,7 @@ def dfa_of_str(s):
     return dfa
 
 
-def count_seqs(seq, txt):
+def count_seq(seq, txt):
     ans = 0
     dfa = dfa_of_str(seq)
     print(dfa)
@@ -41,10 +41,26 @@ def count_seqs(seq, txt):
     return ans
 
 
-print(count_seqs("AG", "AAGAAGA"))
+seq6_list = enum_seq_of_sz(6)
+seq6_count = {x:0 for x in seq6_list}
+
+def count_seq(txt_path):
+    with open(txt_path) as f:
+        txt = f.read()
+    for k in range(len(txt)-6):
+        s = txt[k:k+6]
+        if s in seq6_count:
+            seq6_count[s]+=1
 
 
-#print(enum_seq_of_sz(6))
+count_seq(intergenic_path)
+pairs = list(seq6_count.items())
+
+pairs.sort(key=lambda p : p[1], reverse=True)
+
+print(pairs[:20])
+
+
 
 
 
