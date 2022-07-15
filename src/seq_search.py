@@ -2,6 +2,7 @@ alphabet = ["A", "C", "G", "T"]
 char2id = {"A":0, "C":1, "G":2, "T":3}
 
 intergenic_path = "./data/L1_intergenic.txt"
+conserved_path = "./data/L1_conserved.txt"
 
 def enum_seq_of_sz(k):
     if k == 0: return [""]
@@ -52,13 +53,29 @@ def count_seq(txt_path):
         if s in seq6_count:
             seq6_count[s]+=1
 
+seq6_conserved_count = {x:0 for x in seq6_list}
+def count_conserved_seqs(dna_path, conservation_path):
+    with open(dna_path) as f:
+        dna = f.read()
+    with open(conservation_path) as f:
+        conservation = f.read()
+    for k in range(len(dna)-6):
+        s = dna[k:k+6]
+        if s in seq6_conserved_count and conservation[k:k+6] == "******":
+            seq6_conserved_count[s]+=1
+
 
 count_seq(intergenic_path)
 pairs = list(seq6_count.items())
-
 pairs.sort(key=lambda p : p[1], reverse=True)
+print(pairs[:5])
 
-print(pairs[:20])
+count_conserved_seqs(intergenic_path, conserved_path)
+cons_pairs = list(seq6_conserved_count.items())
+pairs.sort(key=lambda p : p[1], reverse=True)
+print(cons_pairs[:5])
+
+
 
 
 
